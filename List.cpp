@@ -86,18 +86,33 @@ Node* List::FindItem(int value) const
 void List::Insert(int value)
 {
     Node* list = _head;
-    while (list)
+    if (_head == nullptr)
     {
-        Node* newNode = createNode(value);
-        if (list->_number > value)
+        AddToFront(value);
+        return;
+    }
+
+    Node* newNode = createNode(value);
+    if (_head->_number >= value)
+    {
+        Node* tempNode = _head;
+        _head = newNode;
+        newNode->_next = tempNode;
+        return;
+    }
+
+    while (list)
+    {   
+        if (list->_next == nullptr || list->_number <= value && list->_next->_number >= value) // reason it wont work is bc once it finds one less it inserts 
         {
-            list = list->_next;
+            Node* tempNode = list->_next; 
+            list->_next = newNode; 
+            newNode->_next = tempNode;
+            return;
         }
         else
-        {
-            Node* saveNode = list->_next;
-            list->_next = newNode;
-            newNode->_next = saveNode;
+        { 
+            list = list->_next;
         }
     }
 }
@@ -105,19 +120,39 @@ void List::Insert(int value)
 void List::Insert(int value, int position)
 {
     Node* tempNode = _head;
+    Node* switchNode = _head;
+    Node* newNode = createNode(value);
+
+    if (position >= Count() + 1)
+    {
+        return;
+    }
+
     if (position == 0)
     {
         AddToFront(value);
+    }
+    else if (getTail()->_number == value)
+    {
+        for (int i = 0; i != position - 1; i++)
+        {
+            tempNode = tempNode->_next;
+        }
+        tempNode->_next = newNode;
+        newNode->_next = getTail();
     }
     else
     {
         for (int i = 0; i != position; i++)
         {
-            if (i == position)
+            if (i != 0)
             {
-                
+                tempNode = tempNode->_next;
             }
+            switchNode = switchNode->_next;
         }
+        tempNode->_next = newNode;
+        newNode->_next = switchNode;
     }
 
 }
