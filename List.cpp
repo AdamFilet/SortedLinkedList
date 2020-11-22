@@ -158,34 +158,116 @@ void List::Insert(int value, int position)
 }
 
 void List::Delete(int value)
-{
-    Node* list = _head;
-    Node* deleteNode = _head->_next;
-    while (list)
+{ // Only delete value once
+    if (!_head)
     {
-        if (_head->_number == value)
-        {
-            list = _head->_next;
-            delete _head;
-            _head = list;
-        }
-        else if (deleteNode->_number == value) // Need to fix
-        {
-            list->_next = deleteNode->_next;
-            delete deleteNode;
-            continue;
-        }
-        list = list->_next;  
+        return;
     }
+
+    Node* list = _head;
+    if (_head->_number == value)
+    {
+        if (!_head->_next)
+        {
+            delete list;
+            _head = nullptr;
+            return;
+        }
+        else
+        {
+            Node* deleteNode = _head;
+            list = list->_next;
+            delete deleteNode;
+            _head = list;
+            return;
+        }
+   }
+
+   Node* checkNode = _head->_next;
+   while (list->_next)
+   {
+       if (checkNode->_number == value)
+       {
+           list->_next = checkNode->_next;
+           delete checkNode;
+           return;
+       }
+       else
+       {
+           list = list->_next;
+           checkNode = checkNode->_next;
+       }
+
+    }
+    
 }
 
 void List::Concat(const List& Source)
 {
+    Node* list = Source._head;
+    while (list)
+    {
+        AddToEnd(list->_number);
+        list = list->_next;
+    }
+    
 }
 
-void List::Delete(const List& Items)
+void List::Delete(const List& Items) // I can use my other delete function if wanted
 {
-   
+    Node* deleteList = Items._head;
+    Node* list = _head;
+    if (!deleteList || !list)
+    {
+        return;
+    }
+    
+
+    while (deleteList)
+    {
+        if (_head == nullptr)
+        {
+            break;
+        }
+        if (_head->_number == deleteList->_number)
+        {
+            while (list && deleteList)
+            {
+                if (!_head->_next && _head->_number == deleteList->_number)
+                {
+                    _head = nullptr;
+                    delete list;
+                }
+                else
+                {
+                    Node* deleteNode = _head;
+                    _head = list->_next;
+                    delete deleteNode;
+                }
+            }
+        }
+        else
+        {
+            while (list && deleteList)
+            {
+                if (!list->_next)
+                {
+                    break;
+                }
+                if (list->_next->_number == deleteList->_number)
+                {
+                    Node* deleteNode = list->_next;
+                    list->_next = deleteNode->_next;
+                    delete deleteNode;  
+                }
+                else
+                {
+                    list = list->_next;
+                }
+            }
+            deleteList = deleteList->_next;
+        }
+    }
 }
 
 void List::Merge(List& rhs)
