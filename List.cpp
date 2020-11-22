@@ -213,7 +213,7 @@ void List::Concat(const List& Source)
     
 }
 
-void List::Delete(const List& Items) // I can use my other delete function if wanted
+void List::Delete(const List& Items) 
 {
     Node* deleteList = Items._head;
     Node* list = _head;
@@ -221,57 +221,52 @@ void List::Delete(const List& Items) // I can use my other delete function if wa
     {
         return;
     }
-    
 
     while (deleteList)
     {
-        if (_head == nullptr)
+        list = _head;
+        while (list)
         {
-            break;
-        }
-        if (_head->_number == deleteList->_number)
-        {
-            while (list && deleteList)
+            if (!list->_next)
             {
-                if (!_head->_next && _head->_number == deleteList->_number)
+                break;
+            }
+            if (_head->_number == deleteList->_number)
+            {
+                while (_head->_number == deleteList->_number)
                 {
-                    _head = nullptr;
-                    delete list;
-                }
-                else
-                {
-                    Node* deleteNode = _head;
-                    _head = list->_next;
-                    delete deleteNode;
+                    if (_head->_next == nullptr)
+                    {
+                        delete _head;
+                        _head = nullptr;
+                    }
+                    else
+                    {
+                        Node* deleteNode = _head;
+                        list = list->_next;
+                        delete deleteNode;
+                        _head = list;
+                    }
                 }
             }
-        }
-        else
-        {
-            while (list && deleteList)
+            else if (list->_next->_number == deleteList->_number)
             {
-                if (!list->_next)
-                {
-                    break;
-                }
-                if (list->_next->_number == deleteList->_number)
-                {
-                    Node* deleteNode = list->_next;
-                    list->_next = deleteNode->_next;
-                    delete deleteNode;  
-                }
-                else
-                {
-                    list = list->_next;
-                }
+                Node* deleteNode = list->_next;
+                list->_next = deleteNode->_next;
+                delete deleteNode;
             }
-            deleteList = deleteList->_next;
+            else
+            {
+                list = list->_next;
+            }
         }
+        deleteList = deleteList->_next;
     }
 }
 
 void List::Merge(List& rhs)
 {
+
 }
 
 Node* List::getTail()
