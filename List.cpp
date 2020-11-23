@@ -270,47 +270,58 @@ void List::Merge(List& rhs)
     Node* secondList = rhs._head;
     Node* deleteList = rhs._head;
 
-    while (secondList)
+    if (!firstList)
     {
-        firstList = _head;
-        while (firstList)
+        while (secondList)
         {
-            if (!firstList->_next)
-            {
-                Node* newNode = createNode(secondList->_number);
-                firstList->_next = newNode;
-                break;
-            }
-            else if (rhs._head->_number <= _head->_number)
-            {
-                Node* newNode = createNode(rhs._head->_number);
-                Node* tempNode = _head;
-                _head = newNode;
-                newNode->_next = tempNode;
-                rhs._head = rhs._head->_next;
-                break;
-            }
-            else if (firstList->_number <= secondList->_number && secondList->_number <= firstList->_next->_number)
-            {
-                Node* newNode = createNode(secondList->_number);
-                Node* tempNode = firstList->_next;
-                firstList->_next = newNode;
-                newNode->_next = tempNode;
-                break;
-            }
-            else if (firstList->_next->_number <= secondList->_number && secondList->_number <= firstList->_next->_number)
-            {
-                Node* newNode = createNode(secondList->_number);
-                Node* tempNode = firstList->_next;
-                firstList->_next = newNode;
-                newNode->_next = tempNode;
-                break;
-            }
-            firstList = firstList->_next;
+            Insert(secondList->_number);
+            secondList = secondList->_next;
         }
-        secondList = secondList->_next;
     }
-   
+    else
+    {
+        while (secondList)
+        {
+            firstList = _head;
+            while (firstList)
+            {
+                if (!firstList->_next)
+                {
+                    Node* newNode = createNode(secondList->_number);
+                    firstList->_next = newNode;
+                    break;
+                }
+                else if (rhs._head->_number <= _head->_number)
+                {
+                    Node* newNode = createNode(rhs._head->_number);
+                    Node* tempNode = _head;
+                    _head = newNode;
+                    newNode->_next = tempNode;
+                    rhs._head = rhs._head->_next;
+                    break;
+                }
+                else if (firstList->_number <= secondList->_number && secondList->_number <= firstList->_next->_number)
+                {
+                    Node* newNode = createNode(secondList->_number);
+                    Node* tempNode = firstList->_next;
+                    firstList->_next = newNode;
+                    newNode->_next = tempNode;
+                    break;
+                }
+                else if (firstList->_next->_number <= secondList->_number && secondList->_number <= firstList->_next->_number)
+                {
+                    Node* newNode = createNode(secondList->_number);
+                    Node* tempNode = firstList->_next;
+                    firstList->_next = newNode;
+                    newNode->_next = tempNode;
+                    break;
+                }
+                firstList = firstList->_next;
+            }
+            secondList = secondList->_next;
+        }
+     }
+    
     while (deleteList)
     {
         Node* tempNode = deleteList->_next;
