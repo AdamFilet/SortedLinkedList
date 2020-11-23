@@ -103,7 +103,7 @@ void List::Insert(int value)
 
     while (list)
     {   
-        if (list->_next == nullptr || list->_number <= value && list->_next->_number >= value) // reason it wont work is bc once it finds one less it inserts 
+        if (!list->_next || list->_number <= value && list->_next->_number >= value) // reason it wont work is bc once it finds one less it inserts 
         {
             Node* tempNode = list->_next; 
             list->_next = newNode; 
@@ -266,7 +266,57 @@ void List::Delete(const List& Items)
 
 void List::Merge(List& rhs)
 {
+    Node* firstList = _head;
+    Node* secondList = rhs._head;
+    Node* deleteList = rhs._head;
 
+    while (secondList)
+    {
+        firstList = _head;
+        while (firstList)
+        {
+            if (rhs._head->_number <= _head->_number)
+            {
+                Node* newNode = createNode(rhs._head->_number);
+                Node* tempNode = _head;
+                newNode = _head;
+                newNode->_next = tempNode;
+                rhs._head = rhs._head->_next;
+                break;
+            }
+            else if (!firstList->_next)
+            {
+                Node* newNode = createNode(secondList->_number);
+                firstList->_next = newNode;
+                break;
+            }
+            else if (firstList->_number <= secondList->_number && secondList->_number <= firstList->_next->_number)
+            {
+                Node* newNode = createNode(secondList->_number);
+                Node* tempNode = firstList->_next;
+                firstList->_next = newNode;
+                newNode->_next = tempNode;
+                break;
+            }
+            else if (firstList->_next->_number <= secondList->_number && secondList->_number <= firstList->_next->_number)
+            {
+                Node* newNode = createNode(secondList->_number);
+                Node* tempNode = firstList->_next;
+                firstList->_next = newNode;
+                newNode->_next = tempNode;
+                break;
+            }
+            firstList = firstList->_next;
+        }
+        secondList = secondList->_next;
+    }
+   
+    while (deleteList)
+    {
+        Node* tempNode = deleteList->_next;
+        rhs.Delete(deleteList->_number);
+        deleteList = tempNode;
+    }
 }
 
 Node* List::getTail()
