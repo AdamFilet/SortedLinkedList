@@ -62,7 +62,5 @@ private:
 
 private:
     Node* _head;  //!< Pointer to the front of the list
-   // Node* MakeNode(int value) const;
-   
 
 };

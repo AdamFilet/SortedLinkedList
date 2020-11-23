@@ -46,19 +46,13 @@ void List::AddToEnd(int value)
 void List::AddToFront(int value)
 {
     Node* newNode = createNode(value);
-    if (_head == nullptr)
-    {
-        _head = newNode;
-    }
-    else
-    {
-        newNode->_next = _head;
-        _head = newNode;
-    }
+    newNode->_next = _head;
+    _head = newNode;  
 }
 
 int List::Count() const
 {
+    //get rid of this and add a counter if wanted
     Node* list = _head;
     int32_t nodeCount = 0;
     while (list)
@@ -103,7 +97,7 @@ void List::Insert(int value)
 
     while (list)
     {   
-        if (!list->_next || list->_number <= value && list->_next->_number >= value) // reason it wont work is bc once it finds one less it inserts 
+        if (!list->_next || list->_next->_number >= value)
         {
             Node* tempNode = list->_next; 
             list->_next = newNode; 
@@ -158,7 +152,7 @@ void List::Insert(int value, int position)
 }
 
 void List::Delete(int value)
-{ // Only delete value once
+{
     if (!_head)
     {
         return;
@@ -167,20 +161,11 @@ void List::Delete(int value)
     Node* list = _head;
     if (_head->_number == value)
     {
-        if (!_head->_next)
-        {
-            delete list;
-            _head = nullptr;
-            return;
-        }
-        else
-        {
-            Node* deleteNode = _head;
-            list = list->_next;
-            delete deleteNode;
-            _head = list;
-            return;
-        }
+       Node* deleteNode = _head;
+       list = list->_next;
+       delete deleteNode;
+       _head = list;
+       return;
    }
 
    Node* checkNode = _head->_next;
@@ -322,7 +307,7 @@ void List::Merge(List& rhs)
         }
      }
     
-    while (deleteList)
+    while (deleteList) // can make this a helper function
     {
         Node* tempNode = deleteList->_next;
         rhs.Delete(deleteList->_number);
@@ -344,8 +329,3 @@ Node* List::createNode(int32_t value)
 {
     return new Node(value);
 }
-
-//Node* List::MakeNode(int value) const
-//{
-   // return nullptr;
-//}
