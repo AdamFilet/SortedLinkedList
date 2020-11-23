@@ -275,19 +275,19 @@ void List::Merge(List& rhs)
         firstList = _head;
         while (firstList)
         {
-            if (rhs._head->_number <= _head->_number)
-            {
-                Node* newNode = createNode(rhs._head->_number);
-                Node* tempNode = _head;
-                newNode = _head;
-                newNode->_next = tempNode;
-                rhs._head = rhs._head->_next;
-                break;
-            }
-            else if (!firstList->_next)
+            if (!firstList->_next)
             {
                 Node* newNode = createNode(secondList->_number);
                 firstList->_next = newNode;
+                break;
+            }
+            else if (rhs._head->_number <= _head->_number)
+            {
+                Node* newNode = createNode(rhs._head->_number);
+                Node* tempNode = _head;
+                _head = newNode;
+                newNode->_next = tempNode;
+                rhs._head = rhs._head->_next;
                 break;
             }
             else if (firstList->_number <= secondList->_number && secondList->_number <= firstList->_next->_number)
